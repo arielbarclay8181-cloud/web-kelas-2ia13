@@ -22,9 +22,9 @@ const submissionMethods = [
   'Google Classroom',
   'Email',
   'WhatsApp',
-  'Teams',
-  'Moodle',
-  'Manual (Cetak)',
+  'Print',
+  'Makalah',
+  'Manual (buku tugas)',
 ];
 
 export function AssignmentForm({ assignment, onSubmit, onCancel }: AssignmentFormProps) {
