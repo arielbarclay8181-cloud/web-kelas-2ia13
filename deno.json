@@ -4,12 +4,13 @@
     "lib": ["deno.window", "deno.unstable"]
   },
   "deploy": {
-    "entrypoint": "src/supabase/functions/server/index.tsx",
+    "entrypoint": "src/supabase/functions/server/index.tsx", 
     "exclude": [
       "src/",
       "image/",
       "public/",
       "node_modules/"
-    ]
+    ],
+    "nodeModulesDir": false 
   }
 }
