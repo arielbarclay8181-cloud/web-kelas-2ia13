@@ -85,7 +85,7 @@ function AppContent() {
             <div className="flex items-center gap-3 mb-2">
               
               <img 
-                src="https://web-kelas-2ia13-rrr7.vercel.app/assets/logo-Dvjqs8cd.png"
+                src="/image/logo.png" 
                 alt="2IA13 Logo" 
                 className="w-10 h-10 object-contain" 
               />
