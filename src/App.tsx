@@ -9,7 +9,7 @@ import { GroupsPage } from './components/GroupsPage';
 import { ExamsPage } from './components/ExamsPage';
 import { MomentsPage } from './components/MomentsPage';
 import { AdminPage } from './components/AdminPage';
-import logo from '../image/logo.png';
+
 
 
 type PageType = 'schedule' | 'exams' | 'materials' | 'assignments' | 'students' | 'groups' | 'moments' | 'admin';
