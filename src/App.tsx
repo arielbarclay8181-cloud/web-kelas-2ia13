@@ -9,6 +9,8 @@ import { GroupsPage } from './components/GroupsPage';
 import { ExamsPage } from './components/ExamsPage';
 import { MomentsPage } from './components/MomentsPage';
 import { AdminPage } from './components/AdminPage';
+import logo from '../image/logo.png';
+
 
 type PageType = 'schedule' | 'exams' | 'materials' | 'assignments' | 'students' | 'groups' | 'moments' | 'admin';
 
@@ -83,7 +85,7 @@ function AppContent() {
             <div className="flex items-center gap-3 mb-2">
               
               <img 
-                src="/assets/logo-Dyqs8cd.png"
+                src={logo} 
                 alt="2IA13 Logo" 
                 className="w-10 h-10 object-contain" 
               />
