@@ -83,7 +83,7 @@ function AppContent() {
             <div className="flex items-center gap-3 mb-2">
               
               <img 
-                src="/image/logo.png"
+                src="/assets/logo-Dyqs8cd.png"
                 alt="2IA13 Logo" 
                 className="w-10 h-10 object-contain" 
               />
