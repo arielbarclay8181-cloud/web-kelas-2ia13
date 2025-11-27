@@ -113,7 +113,6 @@ export function AssignmentForm({ assignment, onSubmit, onCancel }: AssignmentFor
           />
         </div>
 
-        {/* --- Bagian yang Ditambahkan untuk Link yang Dapat Diklik --- */}
         {detectedUrl && (
           <div className="flex items-center space-x-2 p-3 bg-purple-900/50 rounded-lg border border-purple-500/30">
             <LinkIcon className="w-5 h-5 text-pink-400 flex-shrink-0" />
@@ -132,7 +131,6 @@ export function AssignmentForm({ assignment, onSubmit, onCancel }: AssignmentFor
             </a>
           </div>
         )}
-        {/* ----------------------------------------------------------- */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>

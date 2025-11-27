@@ -23,7 +23,6 @@ export function MomentsPage() {
   const [selectedMoment, setSelectedMoment] = useState<Moment | null>(null); 
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
 
-  // Fetch data moments dari Edge Function
   useEffect(() => {
     fetchMoments();
   }, []);
@@ -45,7 +44,6 @@ export function MomentsPage() {
     }
   };
   
-  // Fungsi kompresi gambar (tetap sama)
   const compressImage = (file: File, maxWidth: number, maxHeight: number, quality: number = 0.7): Promise<File> => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -79,7 +77,6 @@ export function MomentsPage() {
             canvas.toBlob(
               (blob) => {
                 if (blob) {
-                  // Menggunakan nama file asli untuk kompresi, nanti di-sanitize saat submit
                   resolve(new File([blob], file.name, { type: file.type, lastModified: Date.now() }));
                 } else {
                   resolve(file); 
@@ -120,21 +117,15 @@ export function MomentsPage() {
       formDataToSend.append('text', formData.text);
       formDataToSend.append('author', formData.author || 'Anonymous');
       
-      // LOGIKA SANITASI NAMA FILE DENGAN TIMESTAMP UNTUK UPLOAD AMAN
       if (selectedImage) {
-        // 1. Ambil ekstensi
         const ext = selectedImage.name.split('.').pop();
-        
-        // 2. Buat nama file baru yang aman dan unik
         const safeFileName = `moment-${Date.now()}.${ext}`; 
-        
-        // 3. Buat objek File baru dengan nama yang aman
         const safeFile = new File([selectedImage], safeFileName, { 
           type: selectedImage.type, 
           lastModified: Date.now() 
         });
 
-        formDataToSend.append('image', safeFile); // Kirim file yang sudah di-rename
+        formDataToSend.append('image', safeFile); 
       }
 
       const response = await fetch(
@@ -183,20 +174,13 @@ export function MomentsPage() {
     }
   };
 
-  // HAPUS fungsi getImageUrl (yang memanggil Edge Function untuk Signed URL)
-  // Karena kita mengasumsikan bucket sudah PUBLIC.
-  
-  // EFEK BARU: MEMBUAT URL PUBLIK SECARA LANGSUNG DARI imagePath
   useEffect(() => {
     const loadPublicImageUrls = () => {
       const urls: Record<string, string> = {};
-      // NAMA BUCKET YANG DIGUNAKAN DI EDGE FUNCTION ANDA
       const bucketName = 'make-d50695a3-materials'; 
       
       for (const moment of moments) {
-        // Catatan: imagePath di database harus sudah ter-encode atau aman (tanpa spasi)
         if (moment.imagePath && !imageUrls[moment.id]) {
-          // KONSTRUKSI URL PUBLIK SUPABASE STORAGE
           const publicUrl = `https://${projectId}.supabase.co/storage/v1/object/public/${bucketName}/${moment.imagePath}`;
           urls[moment.id] = publicUrl;
         }
@@ -207,7 +191,7 @@ export function MomentsPage() {
     if (moments.length > 0) {
       loadPublicImageUrls();
     }
-  }, [moments, projectId, imageUrls]); // Tambahkan dependensi yang benar
+  }, [moments, projectId, imageUrls]); 
 
   const handleViewMoment = (moment: Moment) => {
     setSelectedMoment(moment);
@@ -217,7 +201,6 @@ export function MomentsPage() {
     setSelectedMoment(null);
   };
   
-  // ... (sisa komponen tetap sama)
   
   if (loading) {
     return (

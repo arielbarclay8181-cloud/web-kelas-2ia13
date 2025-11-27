@@ -14,9 +14,7 @@ interface Assignment {
   createdAt: string;
 }
 
-// Helper function to extract and format URLs as clickable links
 const TaskDisplay = ({ task, completed }: { task: string; completed?: boolean }) => {
-  // Regex to find http/https URLs
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   const parts = task.split(urlRegex);
 
@@ -24,7 +22,6 @@ const TaskDisplay = ({ task, completed }: { task: string; completed?: boolean })
     <p className={`text-sm mb-4 ${completed ? 'text-purple-300/50 line-through' : 'text-purple-300/80'}`}>
       {parts.map((part, index) => {
         if (urlRegex.test(part)) {
-          // If the part is a URL
           return (
             <a 
               key={index} 
@@ -32,7 +29,7 @@ const TaskDisplay = ({ task, completed }: { task: string; completed?: boolean })
               target="_blank" 
               rel="noopener noreferrer" 
               className="text-pink-400 hover:text-pink-300 underline font-medium inline-flex items-center gap-1 transition-colors"
-              onClick={(e) => e.stopPropagation()} // Prevent card's click action (if any)
+              onClick={(e) => e.stopPropagation()} 
               title="Buka Link Tugas"
             >
               Link Tugas 
@@ -40,7 +37,6 @@ const TaskDisplay = ({ task, completed }: { task: string; completed?: boolean })
             </a>
           );
         }
-        // If the part is plain text
         return <span key={index}>{part}</span>;
       })}
     </p>
@@ -271,7 +267,7 @@ export function AssignmentsPage() {
                   )}
                 </div>  
 
-                {/* Task Description (menggunakan komponen baru) */}
+                {/* Task Description */}
                 <TaskDisplay 
                   task={assignment.task} 
                   completed={assignment.completed} 

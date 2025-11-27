@@ -14,7 +14,7 @@ interface ScheduleTableProps {
   schedules: Schedule[];
   onEdit: (schedule: Schedule) => void;
   onDelete: (id: string) => void;
-  isAdmin: boolean; // <-- Tambahkan prop isAdmin
+  isAdmin: boolean; 
 }
 
 const dayOrder = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];

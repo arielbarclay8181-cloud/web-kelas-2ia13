@@ -117,7 +117,7 @@ export function AnnouncementPanel() {
             </div>
           </div>
           
-          {/* Kondisi: Hanya tampilkan tombol Tambah jika isAdmin true */}
+          {/* isAdmin true add*/}
           {isAdmin && (
             <button
               onClick={() => setShowForm(!showForm)}
@@ -184,7 +184,7 @@ export function AnnouncementPanel() {
                       {formatDate(announcement.date)}
                     </p>
                   </div>
-                  {/* Kondisi: Hanya tampilkan tombol Hapus jika isAdmin true */}
+                  {/* isAdmin true delete */}
                   {isAdmin && (
                     <button
                       onClick={() => handleDeleteAnnouncement(announcement.id)}
