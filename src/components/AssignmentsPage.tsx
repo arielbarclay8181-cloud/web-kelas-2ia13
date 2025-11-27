@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit2, Trash2, Clock, CheckCircle2, ClipboardList } from 'lucide-react';
+import { Plus, Edit2, Trash2, Clock, CheckCircle2, ClipboardList, ExternalLink } from 'lucide-react';
 import { AssignmentForm } from './AssignmentForm';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 import { useAdmin } from '../context/AdminContext';
@@ -13,6 +13,40 @@ interface Assignment {
   completed?: boolean;
   createdAt: string;
 }
+
+// Helper function to extract and format URLs as clickable links
+const TaskDisplay = ({ task, completed }: { task: string; completed?: boolean }) => {
+  // Regex to find http/https URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = task.split(urlRegex);
+
+  return (
+    <p className={`text-sm mb-4 ${completed ? 'text-purple-300/50 line-through' : 'text-purple-300/80'}`}>
+      {parts.map((part, index) => {
+        if (urlRegex.test(part)) {
+          // If the part is a URL
+          return (
+            <a 
+              key={index} 
+              href={part} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-pink-400 hover:text-pink-300 underline font-medium inline-flex items-center gap-1 transition-colors"
+              onClick={(e) => e.stopPropagation()} // Prevent card's click action (if any)
+              title="Buka Link Tugas"
+            >
+              Link Tugas 
+              <ExternalLink className="w-3 h-3"/>
+            </a>
+          );
+        }
+        // If the part is plain text
+        return <span key={index}>{part}</span>;
+      })}
+    </p>
+  );
+};
+
 
 export function AssignmentsPage() {
   const { isAdmin } = useAdmin();
@@ -237,10 +271,11 @@ export function AssignmentsPage() {
                   )}
                 </div>  
 
-                {/* Task Description */}
-                <p className={`text-sm mb-4 ${assignment.completed ? 'text-purple-300/50 line-through' : 'text-purple-300/80'}`}>
-                  {assignment.task}
-                </p>
+                {/* Task Description (menggunakan komponen baru) */}
+                <TaskDisplay 
+                  task={assignment.task} 
+                  completed={assignment.completed} 
+                />
 
                 {/* Deadline */}
                 <div className="flex items-center gap-2 mb-4">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X } from 'lucide-react';
+import { X, Link as LinkIcon, ExternalLink } from 'lucide-react';
 
 interface Assignment {
   id: string;
@@ -26,6 +26,14 @@ const submissionMethods = [
   'Makalah',
   'Manual (buku tugas)',
 ];
+
+// Helper function to extract the first URL from a string
+const extractUrl = (text: string): string | null => {
+  // Regex to find http/https URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/;
+  const match = text.match(urlRegex);
+  return match ? match[0] : null;
+};
 
 export function AssignmentForm({ assignment, onSubmit, onCancel }: AssignmentFormProps) {
   const [formData, setFormData] = useState({
@@ -59,6 +67,8 @@ export function AssignmentForm({ assignment, onSubmit, onCancel }: AssignmentFor
       completed: false,
     });
   };
+
+  const detectedUrl = extractUrl(formData.task);
 
   return (
     <div className="bg-gradient-to-br from-purple-900/20 to-pink-900/20 backdrop-blur-sm rounded-xl p-6 border-2 border-purple-500/30">
@@ -98,10 +108,31 @@ export function AssignmentForm({ assignment, onSubmit, onCancel }: AssignmentFor
             onChange={(e) => setFormData({ ...formData, task: e.target.value })}
             className="w-full px-4 py-3 bg-black/40 border border-purple-500/30 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-purple-400/40 transition-all resize-none"
             rows={3}
-            placeholder="Jelaskan detail tugas..."
+            placeholder="Jelaskan detail tugas atau paste link di sini..."
             required
           />
         </div>
+
+        {/* --- Bagian yang Ditambahkan untuk Link yang Dapat Diklik --- */}
+        {detectedUrl && (
+          <div className="flex items-center space-x-2 p-3 bg-purple-900/50 rounded-lg border border-purple-500/30">
+            <LinkIcon className="w-5 h-5 text-pink-400 flex-shrink-0" />
+            <span className="text-sm font-medium text-purple-200 truncate">
+              Link Terdeteksi:
+            </span>
+            <a
+              href={detectedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-auto flex items-center gap-1 px-4 py-2 text-sm rounded-full bg-pink-600 hover:bg-pink-700 text-white font-semibold transition-colors"
+              title={`Buka ${detectedUrl}`}
+            >
+              Buka Tugas
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+        )}
+        {/* ----------------------------------------------------------- */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
