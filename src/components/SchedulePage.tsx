@@ -125,7 +125,7 @@ export function SchedulePage() {
             <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
               Jadwal Kuliah
             </h2>
-            <p className="text-purple-300/60 mt-1">M9</p>
+            <p className="text-purple-300/60 mt-1">M10</p>
           </div>
           {isAdmin && (
             <button
