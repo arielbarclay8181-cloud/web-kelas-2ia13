@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'build', // <- UBAH JADI 'build'
+    outDir: 'dist', 
   },
   server: {
     port: 3000,

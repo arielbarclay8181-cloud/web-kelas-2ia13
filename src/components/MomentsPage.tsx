@@ -116,7 +116,19 @@ export function MomentsPage() {
       formDataToSend.append('text', formData.text);
       formDataToSend.append('author', formData.author || 'Anonymous');
       if (selectedImage) {
-        formDataToSend.append('image', selectedImage); 
+        // 1. Ambil ekstensi (misalnya: .jpg, .png)
+        const ext = selectedImage.name.split('.').pop();
+        
+        // 2. Buat nama file baru yang aman dan unik (menggunakan timestamp)
+        const safeFileName = `moment-${Date.now()}.${ext}`; 
+        
+        // 3. Buat objek File baru dengan nama yang aman (mempertahankan konten)
+        const safeFile = new File([selectedImage], safeFileName, { 
+          type: selectedImage.type, 
+          lastModified: Date.now() 
+        });
+
+        formDataToSend.append('image', safeFile); // Kirim file yang sudah di-rename
       }
 
       const response = await fetch(
