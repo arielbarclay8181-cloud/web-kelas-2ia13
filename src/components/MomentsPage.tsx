@@ -23,6 +23,7 @@ export function MomentsPage() {
   const [selectedMoment, setSelectedMoment] = useState<Moment | null>(null); 
   const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
 
+  // Fetch data moments dari Edge Function
   useEffect(() => {
     fetchMoments();
   }, []);
@@ -43,6 +44,8 @@ export function MomentsPage() {
       setLoading(false);
     }
   };
+  
+  // Fungsi kompresi gambar (tetap sama)
   const compressImage = (file: File, maxWidth: number, maxHeight: number, quality: number = 0.7): Promise<File> => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -76,6 +79,7 @@ export function MomentsPage() {
             canvas.toBlob(
               (blob) => {
                 if (blob) {
+                  // Menggunakan nama file asli untuk kompresi, nanti di-sanitize saat submit
                   resolve(new File([blob], file.name, { type: file.type, lastModified: Date.now() }));
                 } else {
                   resolve(file); 
@@ -115,14 +119,16 @@ export function MomentsPage() {
       const formDataToSend = new FormData();
       formDataToSend.append('text', formData.text);
       formDataToSend.append('author', formData.author || 'Anonymous');
+      
+      // LOGIKA SANITASI NAMA FILE DENGAN TIMESTAMP UNTUK UPLOAD AMAN
       if (selectedImage) {
-        // 1. Ambil ekstensi (misalnya: .jpg, .png)
+        // 1. Ambil ekstensi
         const ext = selectedImage.name.split('.').pop();
         
-        // 2. Buat nama file baru yang aman dan unik (menggunakan timestamp)
+        // 2. Buat nama file baru yang aman dan unik
         const safeFileName = `moment-${Date.now()}.${ext}`; 
         
-        // 3. Buat objek File baru dengan nama yang aman (mempertahankan konten)
+        // 3. Buat objek File baru dengan nama yang aman
         const safeFile = new File([selectedImage], safeFileName, { 
           type: selectedImage.type, 
           lastModified: Date.now() 
@@ -177,38 +183,31 @@ export function MomentsPage() {
     }
   };
 
-  const getImageUrl = async (imagePath: string) => {
-    try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-d50695a3/files/${encodeURIComponent(imagePath)}`,
-        {
-          headers: { Authorization: `Bearer ${publicAnonKey}` },
-        }
-      );
-      const data = await response.json();
-      return data.url;
-    } catch (error) {
-      console.error('Error getting image URL:', error);
-      return null;
-    }
-  };
-
+  // HAPUS fungsi getImageUrl (yang memanggil Edge Function untuk Signed URL)
+  // Karena kita mengasumsikan bucket sudah PUBLIC.
+  
+  // EFEK BARU: MEMBUAT URL PUBLIK SECARA LANGSUNG DARI imagePath
   useEffect(() => {
-    const loadImageUrls = async () => {
+    const loadPublicImageUrls = () => {
       const urls: Record<string, string> = {};
+      // NAMA BUCKET YANG DIGUNAKAN DI EDGE FUNCTION ANDA
+      const bucketName = 'make-d50695a3-materials'; 
+      
       for (const moment of moments) {
+        // Catatan: imagePath di database harus sudah ter-encode atau aman (tanpa spasi)
         if (moment.imagePath && !imageUrls[moment.id]) {
-          const url = await getImageUrl(moment.imagePath);
-          if (url) urls[moment.id] = url;
+          // KONSTRUKSI URL PUBLIK SUPABASE STORAGE
+          const publicUrl = `https://${projectId}.supabase.co/storage/v1/object/public/${bucketName}/${moment.imagePath}`;
+          urls[moment.id] = publicUrl;
         }
       }
       setImageUrls(prev => ({ ...prev, ...urls }));
     };
     
     if (moments.length > 0) {
-      loadImageUrls();
+      loadPublicImageUrls();
     }
-  }, [moments]);
+  }, [moments, projectId, imageUrls]); // Tambahkan dependensi yang benar
 
   const handleViewMoment = (moment: Moment) => {
     setSelectedMoment(moment);
@@ -217,6 +216,8 @@ export function MomentsPage() {
   const handleCloseModal = () => {
     setSelectedMoment(null);
   };
+  
+  // ... (sisa komponen tetap sama)
   
   if (loading) {
     return (
@@ -376,6 +377,7 @@ export function MomentsPage() {
               onClick={moment.imagePath ? () => handleViewMoment(moment) : undefined} 
               className={`group bg-black/40 backdrop-blur-xl rounded-2xl border border-pink-500/20 overflow-hidden hover:border-pink-500/40 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-pink-500/20 ${moment.imagePath ? 'cursor-pointer' : ''}`}
             >
+              {/* Cek apakah URL gambar sudah ada di state */}
               {moment.imagePath && imageUrls[moment.id] && (
                 <div className="relative h-64 overflow-hidden">
                   <img
