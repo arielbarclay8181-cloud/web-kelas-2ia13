@@ -169,7 +169,9 @@ export function CourseSection({
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 opacity-0 group-hover/file:opacity-100 transition-opacity">
+                    
+                    {/* DIV DI BAWAH INI SUDAH DIUBAH AGAR SELALU MUNCUL */}
+                    <div className="flex items-center gap-2 transition-opacity">
                       <button
                         onClick={() => handlePreview(file)}
                         className="p-2 text-purple-400 hover:bg-purple-500/20 rounded-lg transition-all hover:scale-110"
@@ -185,7 +187,7 @@ export function CourseSection({
                         <Download className="w-4 h-4" />
                       </button>
 
-                        {isAdmin && ( 
+                      {isAdmin && ( 
                         <button
                           onClick={() => onDeleteFile(semesterId, course.id, file.id)}
                           className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-all hover:scale-110"
