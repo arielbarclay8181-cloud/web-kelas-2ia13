@@ -170,7 +170,6 @@ export function CourseSection({
                       </div>
                     </div>
                     
-                    {/* DIV DI BAWAH INI SUDAH DIUBAH AGAR SELALU MUNCUL */}
                     <div className="flex items-center gap-2 transition-opacity">
                       <button
                         onClick={() => handlePreview(file)}
